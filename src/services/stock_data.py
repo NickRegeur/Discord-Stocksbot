@@ -21,9 +21,9 @@ def get_quote(symbol: str) -> Quote:
     prev_close = info.get("previous_close")
     currency = info.get("currency", "USD")
 
-    # ---- fallback if fast_info is empty/missing ----
+
     if price is None or prev_close is None:
-        hist = t.history(period="2d", interval="1d")  # 2 closes = last + previous
+        hist = t.history(period="2d", interval="1d")
         if hist is None or hist.empty or "Close" not in hist:
             raise ValueError(f"No price data for {symbol}")
 
@@ -33,7 +33,7 @@ def get_quote(symbol: str) -> Quote:
 
         price = float(closes.iloc[-1])
         prev_close = float(closes.iloc[-2]) if len(closes) >= 2 else None
-    # ----------------------------------------------
+
 
     if price is None:
         raise ValueError(f"No price data for {symbol}")
