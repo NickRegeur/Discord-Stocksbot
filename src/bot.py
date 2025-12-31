@@ -1,23 +1,27 @@
+import os
+import asyncio
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 
-from config import DISCORD_TOKEN, COMMAND_PREFIX
-
-intents = discord.Intents.default()
-intents.messages = True
-
-bot = commands.Bot(command_prefix=COMMAND_PREFIX, intents=intents)
-
-@bot.event
-async def on_ready():
-    print(f"Logged in as {bot.user} (ID: {bot.user.id})")
 
 async def main():
+    load_dotenv()
+
+    intents = discord.Intents.default()
+    intents.message_content = True
+
+    bot = commands.Bot(command_prefix="!", intents=intents)
+
+    @bot.event
+    async def on_ready():
+        print(f"Logged in as {bot.user} (id={bot.user.id})")
+
     await bot.load_extension("cogs.stocks")
-    await bot.start(DISCORD_TOKEN)
+    await bot.start(os.getenv("DISCORD_TOKEN"))
+
 
 if __name__ == "__main__":
-    import asyncio
     asyncio.run(main())
 
 
